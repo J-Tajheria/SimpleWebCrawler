@@ -3,27 +3,21 @@
     getting the next URL
     checking if the list is empty.
 */
-export class UrlFrontier{
-    private queue: string[] = [];
-
-    constructor(seedUrls: string[]){
-        this.queue = [...seedUrls]
+export class UrlFrontier {
+    queue = [];
+    constructor(seedUrls) {
+        this.queue = [...seedUrls];
     }
-
-    add(url: string) {
+    add(url) {
         this.queue.push(url);
     }
-
-    next(): string | undefined{
+    next() {
         return this.queue.shift();
     }
-
-    isEmpty(): boolean{
+    isEmpty() {
         return this.queue.length === 0;
     }
-
-    size(): number{
+    size() {
         return this.queue.length;
     }
 }
-

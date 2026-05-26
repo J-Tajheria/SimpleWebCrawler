@@ -3,13 +3,11 @@
     Can I extract useful data from it?
     Can I find links inside it?
 */
-
 export class ContentParser {
-    parse(html: string): string{
+    parse(html) {
         return html;
     }
-
-    isValid(html: string): boolean{
+    isValid(html) {
         return html.trim().length > 0;
     }
 }

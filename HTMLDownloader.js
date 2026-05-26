@@ -1,22 +1,18 @@
 // This takes the URL and downloads the page.
 export class HtmlDownloader {
-    async download(url: string): Promise<string | null> {
-        try{
+    async download(url) {
+        try {
             const response = await fetch(url);
-
-            if(!response.ok){
+            if (!response.ok) {
                 return null;
             }
-
             const contentType = response.headers.get("content-type") ?? "";
-
-            if(!contentType.includes("text/html")){
+            if (!contentType.includes("text/html")) {
                 return null;
             }
-
             return await response.text();
-
-        } catch{
+        }
+        catch {
             return null;
         }
     }
