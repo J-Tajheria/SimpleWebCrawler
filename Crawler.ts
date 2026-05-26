@@ -56,40 +56,39 @@ export class Crawler{
             }
 
             const links = this.linkExtractor.extract(html, url);
+            const uniqueLinks = new Set(links);
 
             console.log("Links found:");
 
-            if(links.length === 0){
+            if(uniqueLinks.size === 0){
                 console.log("No links found")
             }
 
-            const uniqueLinks = new Set();
-
-            for(const link of links){
-
-                if(uniqueLinks.has(link)){
-                    continue;
-                }
-
-                uniqueLinks.add(link);
-                
+            for(const link of uniqueLinks){
                 console.log(` -${link}`);
-                
+
                 if (!this.urlFilter.shouldVisit(link)) {
+                    console.log(`  Skipped : outside allowed hostname`);
                     continue;
                 }
-                
+
                 if (this.seenUrls.has(link)) {
-                continue;
+                    console.log(`  Skipped already visited: ${link}`);
+                    continue;
                 }
 
                 if (this.queuedUrls.has(link)) {
+                    console.log(`  Skipped already queued: ${link}`);
                     continue;
                 }
-          
+
                 this.queuedUrls.add(link);
                 this.frontier.add(link);
+                  
+                console.log(`  Queued: ${link}`);
             }
+
+            console.log(`Frontier size after page: ${this.frontier.size()}`);
 
             pagesVisited++;
         }

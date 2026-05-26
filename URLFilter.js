@@ -1,14 +1,14 @@
 // The filter decides which links are allowed.
 export class UrlFilter {
-    allowedHost;
-    constructor(allowedHost) {
-        this.allowedHost = allowedHost;
+    allowedHostname;
+    constructor(allowedHostname) {
+        this.allowedHostname = allowedHostname;
     }
     shouldVisit(url) {
         try {
-            const parsed = new URL(url);
-            const isHttp = parsed.protocol === "http" || parsed.protocol === "https";
-            const isSameHostname = parsed.hostname === this.allowedHost;
+            const parsedUrl = new URL(url);
+            const isHttp = parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+            const isSameHostname = parsedUrl.hostname === this.allowedHostname;
             return isHttp && isSameHostname;
         }
         catch {
