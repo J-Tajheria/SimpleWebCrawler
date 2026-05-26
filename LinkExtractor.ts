@@ -1,0 +1,1 @@
+// This component finds links inside the page. It should also convert relative links into full URLs.
