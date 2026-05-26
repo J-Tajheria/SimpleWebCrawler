@@ -7,13 +7,9 @@ export class UrlFilter {
     shouldVisit(url) {
         try {
             const parsed = new URL(url);
-            if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-                return false;
-            }
-            if (parsed.hostname !== this.allowedHost) {
-                return false;
-            }
-            return true;
+            const isHttp = parsed.protocol === "http" || parsed.protocol === "https";
+            const isSameHostname = parsed.hostname === this.allowedHost;
+            return isHttp && isSameHostname;
         }
         catch {
             return false;

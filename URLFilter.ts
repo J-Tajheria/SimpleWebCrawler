@@ -6,15 +6,10 @@ export class UrlFilter{
         try{
             const parsed = new URL(url);
 
-            if (parsed.protocol !== "http:" && parsed.protocol !== "https:"){
-                return false;
-            }
+            const isHttp = parsed.protocol === "http" || parsed.protocol === "https";
+            const isSameHostname = parsed.hostname === this.allowedHost;
 
-            if(parsed.hostname !== this.allowedHost){
-                return false
-            }
-
-            return true;
+            return isHttp && isSameHostname;
         } catch{
             return false;
         }
