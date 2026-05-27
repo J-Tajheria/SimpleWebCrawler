@@ -50,15 +50,12 @@ export class Crawler {
             for (const link of uniqueLinks) {
                 console.log(` -${link}`);
                 if (!this.urlFilter.shouldVisit(link)) {
-                    console.log(`  Skipped : outside allowed hostname`);
                     continue;
                 }
                 if (this.seenUrls.has(link)) {
-                    console.log(`  Skipped already visited: ${link}`);
                     continue;
                 }
                 if (this.queuedUrls.has(link)) {
-                    console.log(`  Skipped already queued: ${link}`);
                     continue;
                 }
                 this.queuedUrls.add(link);

@@ -1,7 +1,6 @@
-/* The parser reads the downloaded HTML and turns it into something easier to inspect.
-    Is this valid HTML?
-    Can I extract useful data from it?
-    Can I find links inside it?
+/* 
+* The ContentParser class is responsible for processing and validating HTML content.
+* It provides methods to parse the HTML and check if the content is valid.
 */
 export class ContentParser {
     parse(html) {

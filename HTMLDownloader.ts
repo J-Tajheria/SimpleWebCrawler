@@ -4,12 +4,14 @@ export class HtmlDownloader {
         try{
             const response = await fetch(url);
 
+            // Skip unsuccessful HTTP responses such as 404 or 500.
             if(!response.ok){
                 return null;
             }
 
             const contentType = response.headers.get("content-type") ?? "";
 
+            // Only process HTML pages.
             if(!contentType.includes("text/html")){
                 return null;
             }
@@ -17,6 +19,7 @@ export class HtmlDownloader {
             return await response.text();
 
         } catch{
+            // Any network failures should not crash the crawler.
             return null;
         }
     }

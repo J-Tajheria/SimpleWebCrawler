@@ -11,16 +11,23 @@ export class Crawler{
     private downloader = new HtmlDownloader();
     private parser = new ContentParser();
     private linkExtractor = new LinkExtractor();
+
+    // Tracks URLs that already been crawled.
     private seenUrls = new SeenStore();
+
+    // Tracks URLs that have already been found and added to the frontier.
+    // This prevents the same URL being queued multiple times before it is visited.
     private queuedUrls = new SeenStore();
 
     constructor(seedUrls: string[]){
         this.frontier = new UrlFrontier(seedUrls);
 
+        // Seed URLs are already in the frontier, so mark them as queued.
         for (const seedUrl of seedUrls){
             this.queuedUrls.add(seedUrl);
         }
 
+        // The crawler is restricted to the exact hostname of the first seed URL.
         const firstSeed = new URL(seedUrls[0]);
         this.urlFilter = new UrlFilter(firstSeed.hostname)
     }
@@ -28,6 +35,7 @@ export class Crawler{
     async crawl(maxPages: number): Promise<void> {
         let pagesVisited = 0;
 
+        // Keep crawling while there are URLs waiting and the max page limit is not reached.
         while (!this.frontier.isEmpty() && pagesVisited < maxPages){
             const url = this.frontier.next()
 
@@ -35,6 +43,7 @@ export class Crawler{
                 continue;
             }
 
+            // Skip URLs that have already been crawled.
             if(this.seenUrls.has(url)){
                 continue;
             }
@@ -55,6 +64,7 @@ export class Crawler{
                 continue;
             }
 
+            // Extract and deduplicate links found on the current page.
             const links = this.linkExtractor.extract(html, url);
             const uniqueLinks = new Set(links);
 
@@ -67,14 +77,17 @@ export class Crawler{
             for(const link of uniqueLinks){
                 console.log(` -${link}`);
 
+                // Do not follow links outside the allowed hostname.
                 if (!this.urlFilter.shouldVisit(link)) {
                     continue;
                 }
 
+                // Do not recrawl URLs thatt havve already been visited.
                 if (this.seenUrls.has(link)) {
                     continue;
                 }
 
+                // Do not add duplicate URLs to the frontier.
                 if (this.queuedUrls.has(link)) {
                     continue;
                 }
